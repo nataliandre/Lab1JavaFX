@@ -7,34 +7,38 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.TextArea?>
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.so.Algorithms.Controller">
+<?import javafx.scene.control.CheckBox?>
+<BorderPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.so.Algorithms.Controller">
     <left>
-        <AnchorPane prefHeight="340.0" prefWidth="140.0" style="-fx-border-color: lightgray; -fx-border-radius: 6px;">
+        <AnchorPane prefHeight="440.0" prefWidth="140.0" style="-fx-border-color: lightgray; -fx-border-radius: 6px;">
             <children>
+                <Label layoutX="25.0" layoutY="15.0" text="Wybierz algorytm:" />
                 <RadioButton id="1" fx:id="radioButton1" layoutX="20.0" layoutY="40.0" mnemonicParsing="false" onAction="#FCFS" text="FCFS">
                     <toggleGroup>
                         <ToggleGroup fx:id="algorithms" />
                     </toggleGroup>
                 </RadioButton>
-                <RadioButton id="2" disable="true" fx:id="radioButton2" layoutX="20.0" layoutY="60.0" mnemonicParsing="false" onAction="#SJF" text="SJF" toggleGroup="$algorithms" />
-                <RadioButton id="3" disable="true" fx:id="radioButton3" layoutX="20.0" layoutY="80.0" mnemonicParsing="false" onAction="#Rotacyjny" text="Rotacyjny" toggleGroup="$algorithms" />
-                <Label layoutX="23.0" layoutY="15.0" text="Wybierz algorytm:" />
-                <Separator layoutX="10.0" layoutY="105.0" prefHeight="5.0" prefWidth="120.0" />
-                <Label layoutX="23.0" layoutY="115.0" text="Ilość procesów:" />
-                <Spinner fx:id="quantitySpinner" editable="true" initialValue="10" layoutX="20.0" layoutY="135.0" max="10000" min="1" prefHeight="20.0" prefWidth="100.0" />
-                <Label layoutX="23.0" layoutY="165.0" text="Maksymalna" wrapText="true" />
-                <Label layoutX="23.0" layoutY="180.0" text="długość procesu:" wrapText="true" />
-                <Spinner fx:id="maxLegthOfProcessSpinner" editable="true" initialValue="5" layoutX="20.0" layoutY="200.0" max="50" min="1" prefHeight="20.0" prefWidth="100.0" />
-                <Label layoutX="23.0" layoutY="230.0" text="Maksymalny" wrapText="true" />
-                <Label layoutX="23.0" layoutY="245.0" text="moment zgłoszenia:" wrapText="true" />
-                <Spinner fx:id="rangeOfCallsSpinner" editable="true" initialValue="10" layoutX="20.0" layoutY="265.0" max="10000" min="1" prefHeight="20.0" prefWidth="100.0" />
-                <Button fx:id="runButton" layoutX="10.0" layoutY="320.0" mnemonicParsing="false" onAction="#run" prefHeight="25.0" prefWidth="120.0" text="Wykonaj symulację" />
+                <RadioButton id="2" fx:id="radioButton2" layoutX="20.0" layoutY="70.0" mnemonicParsing="false" onAction="#SJF" text="SJF" toggleGroup="$algorithms" />
+                <CheckBox fx:id="checkbox" disable="true" layoutX="25.0" layoutY="90.0" text="Wywłaszczanie" />
+                <RadioButton id="3" fx:id="radioButton3" layoutX="20.0" layoutY="120.0" mnemonicParsing="false" onAction="#Rotacyjny" text="Rotacyjny" toggleGroup="$algorithms" />
+                <Label layoutX="25.0" layoutY="140.0" text="Kwant czasu:" />
+                <Spinner fx:id="quantOfTime" disable="true" editable="true" initialValue="10" layoutX="20.0" layoutY="160.0" max="10000" min="1" prefHeight="20.0" prefWidth="100.0" />
+                <Separator layoutX="10.0" layoutY="195.0" prefHeight="5.0" prefWidth="120.0" />
+                <Label layoutX="25.0" layoutY="200.0" text="Ilość procesów:" />
+                <Spinner fx:id="quantitySpinner" editable="true" initialValue="10" layoutX="20.0" layoutY="220.0" max="10000" min="1" prefHeight="20.0" prefWidth="100.0" />
+                <Label layoutX="25.0" layoutY="250.0" text="Maksymalna" wrapText="true" />
+                <Label layoutX="25.0" layoutY="265.0" text="długość procesu:" wrapText="true" />
+                <Spinner fx:id="maxLegthOfProcessSpinner" editable="true" initialValue="5" layoutX="20.0" layoutY="285.0" max="50" min="1" prefHeight="20.0" prefWidth="100.0" />
+                <Label layoutX="25.0" layoutY="315.0" text="Maksymalny" wrapText="true" />
+                <Label layoutX="25.0" layoutY="330.0" text="moment zgłoszenia:" wrapText="true" />
+                <Spinner fx:id="rangeOfCallsSpinner" editable="true" initialValue="10" layoutX="20.0" layoutY="350.0" max="10000" min="1" prefHeight="20.0" prefWidth="100.0" />
+                <Button fx:id="runButton" layoutX="10.0" layoutY="405.0" mnemonicParsing="false" onAction="#run" prefHeight="25.0" prefWidth="120.0" text="Wykonaj symulację" />
             </children>
             <opaqueInsets>
                 <Insets left="10.0" top="100.0" />
@@ -42,17 +46,14 @@
         </AnchorPane>
     </left>
     <bottom>
-        <ProgressBar depthTest="ENABLE" prefHeight="20.0" prefWidth="560.0" progress="0.0" BorderPane.alignment="CENTER">
+        <ProgressBar depthTest="ENABLE" prefHeight="20.0" prefWidth="660.0" progress="0.0" BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets bottom="20.0" top="20.0" />
             </BorderPane.margin>
         </ProgressBar>
     </bottom>
-    <opaqueInsets>
-        <Insets />
-    </opaqueInsets>
     <right>
-        <TextArea fx:id="textArea" editable="false" prefHeight="340.0" prefWidth="460.0" style="-fx-border-color: lightgray; -fx-border-radius: 6px;">
+        <TextArea fx:id="textArea" editable="false" prefHeight="340.0" prefWidth="560.0" style="-fx-border-color: lightgray; -fx-border-radius: 6px;">
             <font>
                 <Font size="12" />
                 <Font name="Courier New" />

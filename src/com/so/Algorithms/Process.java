@@ -1,43 +1,43 @@
 package com.so.Algorithms;
 
 public class Process {
-    private int id, length, currentLength, callAt, startedAt, waitingTime;
+    private int id, burstTime, currentLength, arrivalTime, startedAt, waitTime;
 
-    public Process(int id, int length, int callAt){
+    public Process(int id, int burstTime, int arrivalTime){
         this.id = id;
-        this.length = length;
-        this.currentLength = length;
-        this.callAt = callAt;
+        this.burstTime = burstTime;
+        this.currentLength = burstTime;
+        this.arrivalTime = arrivalTime;
         this.startedAt = 0;
-        this.waitingTime = 0;
+        this.waitTime = 0;
     }
 
     public String toString(){
-        return String.format("ID: %-4d Długość: %-4d Moment zgłaszania: %-4d", id, length, callAt);
+        return String.format("ID: %-4d Długość: %-4d Moment zgłaszania: %-4d", id, burstTime, arrivalTime);
     }
 
     public int getId() {
         return id;
     }
 
-    public int getLength() {
-        return length;
+    public int getBurstTime() {
+        return burstTime;
     }
 
     public int getCurrentLength() {
         return currentLength;
     }
 
-    public int getCallAt() {
-        return callAt;
+    public int getArrivalTime() {
+        return arrivalTime;
     }
 
-    public int getWaitingTime() {
-        return waitingTime;
+    public int getWaitTime() {
+        return waitTime;
     }
 
-    public void setWaitingTime(int waitingTime) {
-        this.waitingTime = waitingTime;
+    public void setWaitTime(int waitTime) {
+        this.waitTime = waitTime;
     }
 
     public void setCurrentLength(int currentLength) {
