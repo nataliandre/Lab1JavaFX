@@ -30,6 +30,16 @@ public class Controller {
     ToggleGroup algorithms;
 
     @FXML
+    protected void checkbox() {
+        textArea.clear();
+        if (!checkbox.isSelected()) {
+            textArea.appendText("Wybrano SJF bez wywłaszczania." + newLine + "Potwierdź wybór." + newLine);
+        } else {
+            textArea.appendText("Wybrano SJF z wywłaszczaniem." + newLine + "Potwierdź wybór." + newLine);
+        }
+    }
+
+    @FXML
     protected void FCFS() {
         checkbox.setDisable(true);
         quantOfTime.setDisable(true);
@@ -42,7 +52,11 @@ public class Controller {
         checkbox.setDisable(false);
         quantOfTime.setDisable(true);
         textArea.clear();
-        textArea.appendText("Wybrano SJF." + newLine + "Potwierdź wybór." + newLine);
+        if (!checkbox.isSelected()) {
+            textArea.appendText("Wybrano SJF bez wywłaszczania." + newLine + "Potwierdź wybór." + newLine);
+        } else {
+            textArea.appendText("Wybrano SJF z wywłaszczaniem." + newLine + "Potwierdź wybór." + newLine);
+        }
     }
 
     @FXML
@@ -65,7 +79,11 @@ public class Controller {
                     break;
                 case "2":
                     SJF sjf = new SJF(quantitySpinner.getValue());
-                    sjf.run();
+                    if (checkbox.isSelected()) {
+                        sjf.runSRTF();
+                    } else {
+                        sjf.runSJF();
+                    }
                     break;
                 case "3":
                     break;
@@ -84,13 +102,13 @@ public class Controller {
         Random r = new Random();
 
         for (int i = 0; i < quantity; i++) {
-            processes.add(new Process(i, (int)(r.nextDouble() * (maxLegthOfProcessSpinner.getValue()) + 1), (int)(r.nextDouble() * (rangeOfCallsSpinner.getValue() - 1))));
+            processes.add(new Process(i, (int) (r.nextDouble() * (maxLegthOfProcessSpinner.getValue()) + 1), (int) (r.nextDouble() * (rangeOfCallsSpinner.getValue() - 1))));
         }
 
         display();
     }
 
-    private void display(){
+    private void display() {
         if (processes.isEmpty()) {
             textArea.appendText("Brak procesów" + newLine);
         } else {
@@ -109,7 +127,7 @@ public class Controller {
             textArea.appendText(newLine);
         }
 
-        public FCFS(){
+        public FCFS() {
             processes = new ArrayList<>();
             queue = new LinkedList<>();
         }
@@ -167,7 +185,7 @@ public class Controller {
                     cycles++;
                 }
 
-                textArea.appendText(newLine + "Średni czas oczekiwania: " + totalWaitingTime/processesDone);
+                textArea.appendText(newLine + "Średni czas oczekiwania: " + totalWaitingTime / processesDone);
             } else {
                 textArea.appendText("Brak procesów do wykonania!");
             }
@@ -176,7 +194,7 @@ public class Controller {
         private int checkWhichIsBurstingNow(int cycle) {
             int index = -1;
 
-            for (int i = 0; i < processes.size(); i++){
+            for (int i = 0; i < processes.size(); i++) {
                 if (processes.get(i).getArrivalTime() == cycle) {
                     index = i;
 
@@ -198,7 +216,7 @@ public class Controller {
             textArea.appendText(newLine);
         }
 
-        public void run() {
+        public void runSRTF() {
             int cycles = 0;
             double totalWaitingTime = 0, processesDone = 0;
             boolean done = false;
@@ -253,7 +271,67 @@ public class Controller {
                     cycles++;
                 }
 
-                textArea.appendText(newLine + "Średni czas oczekiwania: " + totalWaitingTime/processesDone);
+                textArea.appendText(newLine + "Średni czas oczekiwania: " + totalWaitingTime / processesDone);
+            } else {
+                textArea.appendText("Brak procesów do wykonania!");
+            }
+        }
+
+        public void runSJF() {
+            int cycles = 0;
+            double totalWaitingTime = 0, processesDone = 0;
+            boolean done = false;
+            ArrayList<Process> tempList = new ArrayList<>();
+
+            if (processes.size() > 0) {
+                while (!done) {
+                    //sprawdza czy istnieje, bądź istnieją procesy do dodania do kolejki
+                    int index;
+
+                    do {
+                        index = checkWhichIsBurstingNow(cycles);
+
+                        if (index >= 0) {
+                            Process temp = processes.get(index);
+
+                            if (tempList.add(temp)) {
+                                textArea.appendText(String.format("Cykl: %-5d | Dodano   | ID: %-5d | długość: %-5d", cycles, temp.getId(), temp.getBurstTime()) + newLine);
+                            }
+
+                            processes.remove(index);
+                        }
+                    } while (index != -1);
+
+                    //Obsługuje procesy według algorytmu SJF
+                    if (tempList.size() > 0) {
+                        Process temp = tempList.get(0);
+                        int id = temp.getId();
+
+                        if (temp.getCurrentLength() == temp.getBurstTime()) {
+                            temp.setStartedAt(cycles);
+                            temp.setWaitTime(cycles - temp.getArrivalTime());
+                        }
+
+                        temp.setCurrentLength(temp.getCurrentLength() - 1);
+
+                        if (temp.getCurrentLength() == 0) {
+                            int waitTime = temp.getWaitTime();
+                            totalWaitingTime += waitTime;
+                            tempList.remove(0);
+                            processesDone++;
+                            tempList.sort(new Compare());
+                            textArea.appendText(String.format("Cykl: %-5d | Wykonano | ID: %-5d | czas oczekiwania: %-5d", cycles, id, waitTime) + newLine);
+                        }
+
+                        if (tempList.size() == 0 && processes.isEmpty()) {
+                            done = true;
+                        }
+                    }
+
+                    cycles++;
+                }
+
+                textArea.appendText(newLine + "Średni czas oczekiwania: " + totalWaitingTime / processesDone);
             } else {
                 textArea.appendText("Brak procesów do wykonania!");
             }
@@ -262,7 +340,7 @@ public class Controller {
         private int checkWhichIsBurstingNow(int cycle) {
             int index = -1;
 
-            for (int i = 0; i < processes.size(); i++){
+            for (int i = 0; i < processes.size(); i++) {
                 if (processes.get(i).getArrivalTime() == cycle) {
                     index = i;
 
